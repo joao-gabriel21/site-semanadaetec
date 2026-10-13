@@ -50,12 +50,8 @@ body.pagina-codigo{min-height:100vh;margin:0;color:#e7d99c;background:#0b0b07 ur
 #define BUZZER 2
 #define SERVO_PIN 12
 
-// =====================================================
-//  DETECÇÃO AUTOMÁTICA DO LEITOR DE DIGITAL
-//  - Tinkercad (sem a biblioteca)  -&gt; usa o botão em A1
-//  - Arduino real com a biblioteca -&gt; usa o sensor R307/AS608
-//    (se o sensor não responder, cai no botão automaticamente)
-// =====================================================
+// ========================= DETECÇÃO AUTOMÁTICA DO LEITOR DE DIGITAL ============================
+
 #if defined(__has_include)
   #if __has_include(&lt;Adafruit_Fingerprint.h&gt;) &amp;&amp; __has_include(&lt;SoftwareSerial.h&gt;)
     #define TEM_LIB_DIGITAL 1
@@ -70,14 +66,14 @@ body.pagina-codigo{min-height:100vh;margin:0;color:#e7d99c;background:#0b0b07 ur
   #include &lt;Adafruit_Fingerprint.h&gt;
   #include &lt;SoftwareSerial.h&gt;
 
-  SoftwareSerial fingerSerial(3, A0);   // RX do Arduino = 3, TX do Arduino = A0
+  SoftwareSerial fingerSerial(3, A0); 
   Adafruit_Fingerprint finger(&amp;fingerSerial);
 #endif
 
-#define BTN_DIGITAL A1                  // botão da simulação (A1 -&gt; GND)
+#define BTN_DIGITAL A1           
 
-bool sensorOk = false;                  // true = sensor real respondeu
-int  simCount = 0;                      // digitais &quot;cadastradas&quot; na simulação
+bool sensorOk = false;                
+int  simCount = 0;                
 
 // ===================== ESTADOS =====================
 enum State {
@@ -141,9 +137,7 @@ const long DURACAO_BLOQUEIO = 15000;
 
 Servo servo;
 
-// =====================================================
-//                 LEITOR DE DIGITAL
-// =====================================================
+// ================= LEITOR DE DIGITAL =================
 
 // 0 = nada, 1 = digital reconhecida, -1 = digital desconhecida
 int lerDigital() {
@@ -163,7 +157,8 @@ int lerDigital() {
   }
 #endif
 
-  // SIMULAÇÃO: só reconhece se alguma digital já foi cadastrada
+// ==================== SIMULAÇÃO ======================
+
   if (digitalRead(BTN_DIGITAL) == LOW) {
 
     delay(50);
@@ -192,7 +187,8 @@ bool aguardarDedo(bool presente, unsigned long ms) {
 }
 #endif
 
-// Cadastra uma NOVA digital. As anteriores continuam valendo.
+// ================= Cadastra uma NOVA digital =================
+
 bool cadastrarDigital() {
 
 #if TEM_LIB_DIGITAL
@@ -229,8 +225,8 @@ bool cadastrarDigital() {
     return finger.storeModel(id) == FINGERPRINT_OK;
   }
 #endif
+// =================  SIMULAÇÃO =================
 
-  // SIMULAÇÃO: apertar o botão &quot;cadastra&quot; mais uma digital
   lcd.clear();
   lcd.setCursor(1,0);
   lcd.print(&quot;Aperte o botao&quot;);
@@ -254,7 +250,8 @@ bool cadastrarDigital() {
   return false;
 }
 
-// Apaga TODAS as digitais (usado só no reset geral)
+// ================= APAGA TODAS AS DIGITAIS =================
+
 void limparDigitais() {
 
 #if TEM_LIB_DIGITAL
@@ -276,7 +273,8 @@ void mostrarAberto() {
   lcd.print(&quot;C:Fechar *:Menu&quot;);
 }
 
-// volta para o cofre aberto sem repetir a animação
+// ================= volta para o cofre aberto sem repetir a animação =================
+
 void voltarAberto() {
 
   state = ABERTO;
@@ -303,8 +301,7 @@ void resetSistema() {
   lcd.setCursor(1,0);
   lcd.print(&quot;RESET GERAL&quot;);
 
-  limparDigitais();                     // apaga todas as digitais
-
+  limparDigitais();                   
   lcd.setCursor(0,1);
 
   for (int k = 0; k &lt; 16; k++) {
@@ -349,6 +346,7 @@ void salvarSenha() {
 }
 
 // ===================== ESTADOS =====================
+
 void enterState(State newState) {
 
   state = newState;
@@ -563,8 +561,8 @@ void loop() {
     delay(20);
     noTone(BUZZER);
   }
+ // ================= ABRIR COM DIGITAL (cofre fechado ou digitando a senha) =================
 
-  // ABRIR COM DIGITAL (cofre fechado ou digitando a senha)
   if (state == FECHADO || state == DIGITANDO) {
 
     int d = lerDigital();
