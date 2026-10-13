@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avalie nosso projeto | Cofre Arduino</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #e7d99c;
+            background-color: #0b0b07;
+            background-image: url("Fundo.png");
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 100% 100%;
+            background-attachment: fixed;
+        }
+
+        .pagina-avaliacao {
+            position: relative;
+            isolation: isolate;
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 42px 22px;
+            overflow: hidden;
+        }
+
+        .pagina-avaliacao::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: url("Fundo.png");
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 100% 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .planta-avaliacao {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            z-index: -1;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .conteudo-avaliacao {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+            text-align: center;
+            padding: clamp(24px, 5vw, 54px);
+            border: 1px solid rgba(231, 217, 156, 0.48);
+            border-radius: 18px;
+            background: rgba(11, 11, 7, 0.82);
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(3px);
+        }
+
+        .titulo-avaliacao {
+            margin-bottom: 20px;
+            color: #f1df9a;
+            font-family: "Times New Roman", Times, serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.12;
+            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.65);
+        }
+
+        .texto-avaliacao {
+            max-width: 680px;
+            margin: 0 auto 34px;
+            color: #f1e7c0;
+            font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+            line-height: 1.85;
+            letter-spacing: 0.015em;
+            text-wrap: pretty;
+        }
+
+        .texto-avaliacao strong {
+            color: #f1df9a;
+            font-weight: 700;
+        }
+
+        /* QR exibido diretamente, sem caixa, borda ou fundo. */
+        .imagem-qr {
+            display: block;
+            width: min(78vw, 310px);
+            height: auto;
+            margin: 0 auto 32px;
+            object-fit: contain;
+            image-rendering: auto;
+        }
+
+        .botao-voltar-inicio {
+            display: inline-block;
+            padding: 13px 28px;
+            border: 1px solid #e7d99c;
+            border-radius: 8px;
+            background: rgba(15, 15, 9, 0.88);
+            color: #fff1bf;
+            font-family: inherit;
+            font-size: 1.05rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .botao-voltar-inicio:hover {
+            background: #8a6b2e;
+            transform: translateY(-2px);
+        }
+
+        .botao-voltar-inicio:focus-visible {
+            outline: 3px solid #fff1bf;
+            outline-offset: 4px;
+        }
+
+        @media (max-width: 480px) {
+            .pagina-avaliacao {
+                padding: 20px 14px;
+            }
+
+            .conteudo-avaliacao {
+                padding: 26px 18px;
+            }
+
+            .imagem-qr {
+                width: min(78vw, 260px);
+            }
+        }
+    </style>
+</head>
+<body class="pagina-montagem">
+    <main class="pagina-avaliacao">
+        <img class="planta-avaliacao" src="Planta cool.png" alt="" aria-hidden="true">
+
+        <section class="conteudo-avaliacao">
+            <h1 class="titulo-avaliacao">Agradecemos a atenção!</h1>
+
+            <p class="texto-avaliacao">
+                Antes de ir, se possível, escaneie o <strong>código QR</strong> e deixe suas impressões sinceras a respeito do projeto. Sua opinião é imprescindível para nós!
+            </p>
+
+            <img class="imagem-qr" src="QR-placeholder.png" alt="Código QR para avaliar o projeto">
+
+            <a class="botao-voltar-inicio" href="index.html">Voltar ao início</a>
+        </section>
+    </main>
+</body>
+</html>
