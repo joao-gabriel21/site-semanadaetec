@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Código | Cofre Arduino</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+body.pagina-codigo{min-height:100vh;margin:0;color:#e7d99c;background:#0b0b07 url("Fundo.png") center center/100% 100% fixed no-repeat;font-family:Georgia,"Times New Roman",serif}
+.planta-codigo{position:fixed;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none;z-index:1}
+.codigo-pagina{position:relative;z-index:2;width:min(1400px,calc(100% - 40px));margin:0 auto;padding:52px 0 42px}
+.codigo-cabecalho{text-align:center;margin:0 auto 28px}
+.codigo-identificacao{margin:0 0 10px;color:#c5a95b;font:700 .78rem Arial,Helvetica,sans-serif;letter-spacing:.2em;text-transform:uppercase}
+.codigo-cabecalho h1{margin:0;color:#f0dfa0;font-size:clamp(2.7rem,6vw,5rem);line-height:1.08;text-shadow:0 3px 18px #000}
+.codigo-linha-dourada{width:min(220px,45%);height:3px;margin:20px auto 0;border-radius:999px;background:linear-gradient(90deg,transparent,#c6a75b,#f4e3a4,#c6a75b,transparent)}
+.codigo-introducao{max-width:760px;margin:0 auto 22px;color:#e2d6a7;font-size:1.05rem;line-height:1.7;text-align:center;text-shadow:0 2px 8px #000}
+.codigo-painel{overflow:hidden;border:1px solid rgba(214,184,101,.7);border-radius:14px;background:rgba(8,10,7,.97);box-shadow:0 18px 55px rgba(0,0,0,.55),0 0 22px rgba(190,153,66,.09)}
+.codigo-painel-topo{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 18px;border-bottom:1px solid rgba(214,184,101,.28);background:rgba(199,164,79,.09);color:#d9c47f;font: .82rem Arial,Helvetica,sans-serif;letter-spacing:.04em}
+.codigo-pontos{display:flex;gap:7px;flex:0 0 auto}.codigo-pontos span{display:block;width:10px;height:10px;border-radius:50%;background:#b69a50}.codigo-pontos span:nth-child(2){background:#8f824e}.codigo-pontos span:nth-child(3){background:#d4c17c}
+.codigo-scroll{max-height:72vh;min-height:320px;overflow:auto;overscroll-behavior:contain;scrollbar-color:#9c8242 #14150f;scrollbar-width:thin}
+.codigo-scroll pre{margin:0;padding:22px 24px 26px;color:#e9e5d4;font:14px/1.65 Consolas,"Courier New",monospace;tab-size:2;white-space:pre;width:max-content;min-width:100%}
+.codigo-scroll code{font:inherit}
+.codigo-rodape{display:flex;justify-content:center;margin-top:30px}
+.botao-voltar-codigo{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:170px;padding:12px 24px;border:1px solid #c7aa5e;border-radius:8px;background:rgba(18,18,10,.92);color:#f0dfa0;font:1.05rem Georgia,"Times New Roman",serif;text-decoration:none;transition:background-color .2s,color .2s,transform .2s,box-shadow .2s}
+.botao-voltar-codigo:hover,.botao-voltar-codigo:focus-visible{color:#17150d;background:#d9c17b;box-shadow:0 0 20px rgba(217,193,123,.24);transform:translateY(-2px)}
+.botao-voltar-codigo:focus-visible{outline:3px solid #f4e3a4;outline-offset:4px}
+@media(max-width:600px){.codigo-pagina{width:calc(100% - 22px);padding-top:34px}.codigo-introducao{font-size:.95rem}.codigo-painel-topo{padding:11px 13px;font-size:.72rem}.codigo-scroll{max-height:68vh;min-height:280px}.codigo-scroll pre{padding:16px;font-size:12px;line-height:1.6}}
+@media(prefers-reduced-motion:reduce){.botao-voltar-codigo{transition:none}}
+</style>
+</head>
+<body class="pagina-codigo">
+  <img src="Planta cool.png" class="planta-codigo" alt="" aria-hidden="true">
+  <main class="codigo-pagina">
+    <header class="codigo-cabecalho">
+  
+      <h1>Código</h1>
+    </header>
+    <section class="codigo-painel" aria-label="Código-fonte completo do projeto">
+      <div class="codigo-painel-topo">
+        <div class="codigo-pontos" aria-hidden="true"><span></span><span></span><span></span></div>
+        <span>cofre_arduino.ino</span>
+        <span>Arduino / C++</span>
+      </div>
+      <div class="codigo-scroll" tabindex="0" role="region" aria-label="Código-fonte com rolagem">
+        <pre><code>#include &lt;Servo.h&gt;
+#include &lt;Keypad.h&gt;
+#include &lt;LiquidCrystal_I2C.h&gt;
+
+#define LED 13
+#define BUZZER 2
+#define SERVO_PIN 12
+
+// =====================================================
+//  DETECÇÃO AUTOMÁTICA DO LEITOR DE DIGITAL
+//  - Tinkercad (sem a biblioteca)  -&gt; usa o botão em A1
+//  - Arduino real com a biblioteca -&gt; usa o sensor R307/AS608
+//    (se o sensor não responder, cai no botão automaticamente)
+// =====================================================
+#if defined(__has_include)
+  #if __has_include(&lt;Adafruit_Fingerprint.h&gt;) &amp;&amp; __has_include(&lt;SoftwareSerial.h&gt;)
+    #define TEM_LIB_DIGITAL 1
+  #endif
+#endif
+
+#ifndef TEM_LIB_DIGITAL
+  #define TEM_LIB_DIGITAL 0
+#endif
+
+#if TEM_LIB_DIGITAL
+  #include &lt;Adafruit_Fingerprint.h&gt;
+  #include &lt;SoftwareSerial.h&gt;
+
+  SoftwareSerial fingerSerial(3, A0);   // RX do Arduino = 3, TX do Arduino = A0
+  Adafruit_Fingerprint finger(&amp;fingerSerial);
+#endif
+
+#define BTN_DIGITAL A1                  // botão da simulação (A1 -&gt; GND)
+
+bool sensorOk = false;                  // true = sensor real respondeu
+int  simCount = 0;                      // digitais &quot;cadastradas&quot; na simulação
+
+// ===================== ESTADOS =====================
+enum State {
+  CONFIGURAR,
+  FECHADO,
+  DIGITANDO,
+  ABERTO,
+  MENU,
+  BLOQUEADO,
+  ERRO,
+  ALERTA
+};
+
+State state = FECHADO;
+
+// ===================== PROTÓTIPOS =====================
+void enterState(State newState);
+void checkPassword();
+void resetSistema();
+void salvarSenha();
+void mostrarAberto();
+void voltarAberto();
+int  lerDigital();
+bool cadastrarDigital();
+void limparDigitais();
+
+// ===================== TECLADO =====================
+const byte ROWS = 4;
+const byte COLS = 4;
+
+char keys[ROWS][COLS] = {
+  {&#x27;1&#x27;,&#x27;2&#x27;,&#x27;3&#x27;,&#x27;A&#x27;},
+  {&#x27;4&#x27;,&#x27;5&#x27;,&#x27;6&#x27;,&#x27;B&#x27;},
+  {&#x27;7&#x27;,&#x27;8&#x27;,&#x27;9&#x27;,&#x27;C&#x27;},
+  {&#x27;*&#x27;,&#x27;0&#x27;,&#x27;#&#x27;,&#x27;D&#x27;}
+};
+
+byte rowPins[ROWS] = {11, 10, 9, 8};
+byte colPins[COLS] = {7, 6, 5, 4};
+
+Keypad kp = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
+
+// ===================== LCD =====================
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+// ===================== SENHA =====================
+const int PASS_LENGTH = 4;
+
+char correctPass[PASS_LENGTH + 1] = &quot;&quot;;
+bool senhaDefinida = false;
+
+char pass[PASS_LENGTH + 1];
+int i = 0;
+
+// ===================== CONTROLE =====================
+int tentativas = 0;
+const int MAX_TENT = 3;
+
+unsigned long tempoBloqueio = 0;
+const long DURACAO_BLOQUEIO = 15000;
+
+Servo servo;
+
+// =====================================================
+//                 LEITOR DE DIGITAL
+// =====================================================
+
+// 0 = nada, 1 = digital reconhecida, -1 = digital desconhecida
+int lerDigital() {
+
+#if TEM_LIB_DIGITAL
+  if (sensorOk) {
+
+    if (finger.getImage() != FINGERPRINT_OK) return 0;
+    if (finger.image2Tz() != FINGERPRINT_OK) return 0;
+
+    uint8_t r = finger.fingerFastSearch();
+
+    if (r == FINGERPRINT_OK) return 1;
+    if (r == FINGERPRINT_NOTFOUND) return -1;
+
+    return 0;
+  }
+#endif
+
+  // SIMULAÇÃO: só reconhece se alguma digital já foi cadastrada
+  if (digitalRead(BTN_DIGITAL) == LOW) {
+
+    delay(50);
+    while (digitalRead(BTN_DIGITAL) == LOW);
+
+    return (simCount &gt; 0) ? 1 : -1;
+  }
+
+  return 0;
+}
+
+#if TEM_LIB_DIGITAL
+bool aguardarDedo(bool presente, unsigned long ms) {
+
+  unsigned long t = millis();
+
+  while (millis() - t &lt; ms) {
+
+    uint8_t r = finger.getImage();
+
+    if (presente &amp;&amp; r == FINGERPRINT_OK) return true;
+    if (!presente &amp;&amp; r == FINGERPRINT_NOFINGER) return true;
+  }
+
+  return false;
+}
+#endif
+
+// Cadastra uma NOVA digital. As anteriores continuam valendo.
+bool cadastrarDigital() {
+
+#if TEM_LIB_DIGITAL
+  if (sensorOk) {
+
+    finger.getTemplateCount();
+    uint16_t id = finger.templateCount + 1;   // próximo ID livre
+
+    lcd.clear();
+    lcd.setCursor(1,0);
+    lcd.print(&quot;Coloque o dedo&quot;);
+
+    if (!aguardarDedo(true, 10000)) return false;
+    if (finger.image2Tz(1) != FINGERPRINT_OK) return false;
+
+    lcd.clear();
+    lcd.setCursor(1,0);
+    lcd.print(&quot;Tire o dedo&quot;);
+    delay(1000);
+
+    if (!aguardarDedo(false, 10000)) return false;
+
+    lcd.clear();
+    lcd.setCursor(1,0);
+    lcd.print(&quot;Mesmo dedo&quot;);
+    lcd.setCursor(1,1);
+    lcd.print(&quot;novamente&quot;);
+
+    if (!aguardarDedo(true, 10000)) return false;
+    if (finger.image2Tz(2) != FINGERPRINT_OK) return false;
+
+    if (finger.createModel() != FINGERPRINT_OK) return false;
+
+    return finger.storeModel(id) == FINGERPRINT_OK;
+  }
+#endif
+
+  // SIMULAÇÃO: apertar o botão &quot;cadastra&quot; mais uma digital
+  lcd.clear();
+  lcd.setCursor(1,0);
+  lcd.print(&quot;Aperte o botao&quot;);
+  lcd.setCursor(1,1);
+  lcd.print(&quot;p/ cadastrar&quot;);
+
+  unsigned long t = millis();
+
+  while (millis() - t &lt; 10000) {
+
+    if (digitalRead(BTN_DIGITAL) == LOW) {
+
+      delay(50);
+      while (digitalRead(BTN_DIGITAL) == LOW);
+
+      simCount++;
+      return true;
+    }
+  }
+
+  return false;
+}
+
+// Apaga TODAS as digitais (usado só no reset geral)
+void limparDigitais() {
+
+#if TEM_LIB_DIGITAL
+  if (sensorOk) finger.emptyDatabase();
+#endif
+
+  simCount = 0;
+}
+
+// ===================== TELAS DO COFRE ABERTO =====================
+void mostrarAberto() {
+
+  lcd.clear();
+
+  lcd.setCursor(3,0);
+  lcd.print(&quot;ACESSO OK&quot;);
+
+  lcd.setCursor(0,1);
+  lcd.print(&quot;C:Fechar *:Menu&quot;);
+}
+
+// volta para o cofre aberto sem repetir a animação
+void voltarAberto() {
+
+  state = ABERTO;
+  mostrarAberto();
+}
+
+// ===================== RESET =====================
+void resetSistema() {
+
+  tentativas = 0;
+  i = 0;
+
+  noTone(BUZZER);
+  digitalWrite(LED, LOW);
+
+  for (int j = 0; j &lt; PASS_LENGTH; j++) {
+    pass[j] = &#x27;\0&#x27;;
+  }
+
+  servo.write(45);
+
+  lcd.clear();
+
+  lcd.setCursor(1,0);
+  lcd.print(&quot;RESET GERAL&quot;);
+
+  limparDigitais();                     // apaga todas as digitais
+
+  lcd.setCursor(0,1);
+
+  for (int k = 0; k &lt; 16; k++) {
+
+    lcd.print((char)255);
+
+    tone(BUZZER, 2500);
+    delay(25);
+    noTone(BUZZER);
+  }
+
+  delay(400);
+
+  enterState(FECHADO);
+}
+
+// ===================== SALVAR SENHA =====================
+void salvarSenha() {
+
+  for (int j = 0; j &lt; PASS_LENGTH; j++) {
+    correctPass[j] = pass[j];
+  }
+  correctPass[PASS_LENGTH] = &#x27;\0&#x27;;
+
+  senhaDefinida = true;
+  tentativas = 0;
+
+  lcd.clear();
+
+  lcd.setCursor(2,0);
+  lcd.print(&quot;Senha Salva!&quot;);
+
+  tone(BUZZER, 2500);
+  delay(120);
+  tone(BUZZER, 3200);
+  delay(120);
+  noTone(BUZZER);
+
+  delay(1000);
+
+  enterState(FECHADO);
+}
+
+// ===================== ESTADOS =====================
+void enterState(State newState) {
+
+  state = newState;
+
+  lcd.clear();
+  noTone(BUZZER);
+
+  switch (state) {
+
+    case CONFIGURAR:
+
+      i = 0;
+
+      for (int j = 0; j &lt; PASS_LENGTH; j++) {
+        pass[j] = &#x27;\0&#x27;;
+      }
+
+      if (!senhaDefinida) {
+        lcd.setCursor(1,0);
+        lcd.print(&quot;Defina a Senha&quot;);
+      }
+      else {
+        lcd.setCursor(3,0);
+        lcd.print(&quot;Nova Senha&quot;);
+      }
+
+      lcd.setCursor(4,1);
+      lcd.print(&quot;_ _ _ _&quot;);
+
+      break;
+
+    case FECHADO:
+
+      servo.write(90);
+
+      lcd.setCursor(1,0);
+      lcd.print(&quot;Cofre Fechado&quot;);
+
+      lcd.setCursor(1,1);
+      lcd.print(&quot;Senha/Digital&quot;);
+
+      i = 0;
+
+      for (int j = 0; j &lt; PASS_LENGTH; j++) {
+        pass[j] = &#x27;\0&#x27;;
+      }
+
+      break;
+
+    case DIGITANDO:
+
+      lcd.setCursor(1,0);
+      lcd.print(&quot;Digite a Senha&quot;);
+
+      lcd.setCursor(4,1);
+      lcd.print(&quot;_ _ _ _&quot;);
+
+      break;
+
+    case ABERTO:
+
+      servo.write(0);
+
+      lcd.setCursor(0,0);
+      lcd.print(&quot;Abrindo Cofre&quot;);
+
+      for (int k = 0; k &lt; 16; k++) {
+
+        lcd.setCursor(k,1);
+        lcd.print((char)255);
+
+        tone(BUZZER, 1800);
+        delay(40);
+        noTone(BUZZER);
+      }
+
+      mostrarAberto();
+
+      tentativas = 0;
+
+      tone(BUZZER, 2500);
+      delay(120);
+
+      tone(BUZZER, 3200);
+      delay(120);
+
+      noTone(BUZZER);
+
+      break;
+
+    case MENU:
+
+      lcd.setCursor(1,0);
+      lcd.print(&quot;Alterar o que?&quot;);
+
+      lcd.setCursor(0,1);
+      lcd.print(&quot;1:Senha 2:Digit.&quot;);
+
+      break;
+
+    case BLOQUEADO:
+
+      tempoBloqueio = millis();
+
+      lcd.setCursor(2,0);
+      lcd.print(&quot;BLOQUEADO&quot;);
+
+      lcd.setCursor(2,1);
+      lcd.print(&quot;Aguarde...&quot;);
+
+      break;
+
+    case ALERTA:
+
+      lcd.setCursor(0,0);
+      lcd.print(&quot;!!! ALERTA !!!&quot;);
+
+      break;
+
+    case ERRO:
+
+      lcd.setCursor(1,0);
+      lcd.print(&quot;Senha Errada&quot;);
+
+      lcd.setCursor(3,1);
+      lcd.print(&quot;Restam:&quot;);
+      lcd.print(MAX_TENT - tentativas);
+
+      break;
+  }
+}
+
+// ===================== SENHA =====================
+void checkPassword() {
+
+  bool ok = true;
+
+  if (i != PASS_LENGTH) {
+    ok = false;
+  }
+
+  else {
+
+    for (int j = 0; j &lt; PASS_LENGTH; j++) {
+
+      if (pass[j] != correctPass[j]) {
+        ok = false;
+      }
+    }
+  }
+
+  if (ok) {
+    enterState(ABERTO);
+  }
+
+  else {
+
+    tentativas++;
+
+    if (tentativas &gt;= MAX_TENT) {
+      enterState(BLOQUEADO);
+    }
+
+    else {
+      enterState(ERRO);
+    }
+  }
+}
+
+// ===================== SETUP =====================
+void setup() {
+
+  pinMode(LED, OUTPUT);
+  pinMode(BUZZER, OUTPUT);
+  pinMode(BTN_DIGITAL, INPUT_PULLUP);
+
+#if TEM_LIB_DIGITAL
+  finger.begin(57600);
+  delay(100);
+  sensorOk = finger.verifyPassword();
+#endif
+
+  servo.attach(SERVO_PIN);
+
+  lcd.init();
+  lcd.backlight();
+
+  // mostra qual leitor está em uso
+  lcd.setCursor(0,0);
+  lcd.print(sensorOk ? &quot;Leitor: Sensor&quot; : &quot;Leitor: Botao&quot;);
+  delay(1200);
+
+  servo.write(90);
+  enterState(CONFIGURAR);
+}
+
+// ===================== LOOP =====================
+void loop() {
+
+  char key = kp.getKey();
+
+  // RESET GLOBAL (só depois que existe uma senha)
+  if (key == &#x27;B&#x27; &amp;&amp; senhaDefinida) {
+    resetSistema();
+    return;
+  }
+
+  // SOM TECLAS
+  if (key) {
+
+    tone(BUZZER, 3000);
+    delay(20);
+    noTone(BUZZER);
+  }
+
+  // ABRIR COM DIGITAL (cofre fechado ou digitando a senha)
+  if (state == FECHADO || state == DIGITANDO) {
+
+    int d = lerDigital();
+
+    if (d == 1) {
+      enterState(ABERTO);
+      return;
+    }
+
+    else if (d == -1) {
+
+      tentativas++;
+
+      if (tentativas &gt;= MAX_TENT) enterState(BLOQUEADO);
+      else enterState(ERRO);
+
+      return;
+    }
+  }
+
+  switch (state) {
+
+    // ===================== CONFIGURAR =====================
+    case CONFIGURAR:
+
+      if (key) {
+
+        if (key &gt;= &#x27;0&#x27; &amp;&amp; key &lt;= &#x27;9&#x27;) {
+
+          if (i &lt; PASS_LENGTH) {
+
+            int pos = 4 + (i * 2);
+
+            lcd.setCursor(pos,1);
+            lcd.print(key);
+
+            delay(300);
+
+            lcd.setCursor(pos,1);
+            lcd.print(&quot;*&quot;);
+
+            pass[i++] = key;
+          }
+        }
+
+        else if (key == &#x27;D&#x27; || key == &#x27;#&#x27;) {
+
+          if (i == PASS_LENGTH) {
+            salvarSenha();
+          }
+        }
+
+        else if (key == &#x27;*&#x27;) {
+
+          if (i &gt; 0) {
+
+            i--;
+
+            pass[i] = &#x27;\0&#x27;;
+
+            int pos = 4 + (i * 2);
+
+            lcd.setCursor(pos,1);
+            lcd.print(&quot;_&quot;);
+
+            lcd.setCursor(pos + 1,1);
+            lcd.print(&quot; &quot;);
+          }
+        }
+
+        else if (key == &#x27;C&#x27;) {
+
+          for (int j = 0; j &lt; PASS_LENGTH; j++) {
+            pass[j] = &#x27;\0&#x27;;
+          }
+
+          i = 0;
+
+          lcd.setCursor(4,1);
+          lcd.print(&quot;_ _ _ _&quot;);
+        }
+
+        // CANCELAR a troca (só se já existe senha)
+        else if (key == &#x27;A&#x27; &amp;&amp; senhaDefinida) {
+          voltarAberto();
+        }
+      }
+
+      break;
+
+    // ===================== FECHADO =====================
+    case FECHADO:
+
+      if (key &amp;&amp; key != &#x27;B&#x27;) {
+
+        if (key == &#x27;A&#x27;) {
+          enterState(ALERTA);
+        }
+
+        else {
+          enterState(DIGITANDO);
+        }
+      }
+
+      break;
+
+    // ===================== DIGITANDO =====================
+    case DIGITANDO:
+
+      if (key) {
+
+        if (key &gt;= &#x27;0&#x27; &amp;&amp; key &lt;= &#x27;9&#x27;) {
+
+          if (i &lt; PASS_LENGTH) {
+
+            int pos = 4 + (i * 2);
+
+            lcd.setCursor(pos,1);
+            lcd.print(key);
+
+            delay(300);
+
+            lcd.setCursor(pos,1);
+            lcd.print(&quot;*&quot;);
+
+            pass[i++] = key;
+          }
+        }
+
+        else if (key == &#x27;D&#x27; || key == &#x27;#&#x27;) {
+
+          checkPassword();
+        }
+
+        else if (key == &#x27;*&#x27;) {
+
+          if (i &gt; 0) {
+
+            i--;
+
+            pass[i] = &#x27;\0&#x27;;
+
+            int pos = 4 + (i * 2);
+
+            lcd.setCursor(pos,1);
+            lcd.print(&quot;_&quot;);
+
+            lcd.setCursor(pos + 1,1);
+            lcd.print(&quot; &quot;);
+          }
+        }
+
+        else if (key == &#x27;C&#x27;) {
+
+          for (int j = 0; j &lt; PASS_LENGTH; j++) {
+            pass[j] = &#x27;\0&#x27;;
+          }
+
+          i = 0;
+
+          lcd.setCursor(4,1);
+          lcd.print(&quot;_ _ _ _&quot;);
+        }
+      }
+
+      break;
+
+    // ===================== ABERTO =====================
+    case ABERTO:
+
+      if (key == &#x27;C&#x27;) {
+        enterState(FECHADO);
+      }
+
+      // MENU DE ALTERAÇÃO (só com o cofre aberto)
+      else if (key == &#x27;*&#x27;) {
+        enterState(MENU);
+      }
+
+      break;
+
+    // ===================== MENU =====================
+    case MENU:
+
+      if (key == &#x27;1&#x27;) {
+        enterState(CONFIGURAR);          // trocar senha
+      }
+
+      else if (key == &#x27;2&#x27;) {
+
+        bool ok = cadastrarDigital();    // cadastrar nova digital
+
+        lcd.clear();
+        lcd.setCursor(1,0);
+        lcd.print(ok ? &quot;Digital salva!&quot; : &quot;Falhou&quot;);
+
+        tone(BUZZER, ok ? 3200 : 800);
+        delay(150);
+        noTone(BUZZER);
+
+        delay(1200);
+
+        voltarAberto();
+      }
+
+      else if (key == &#x27;C&#x27;) {
+        voltarAberto();                  // cancelar
+      }
+
+      break;
+
+    // ===================== ERRO =====================
+    case ERRO: {
+
+      static unsigned long lastBlink = 0;
+      static bool st = false;
+      static unsigned long startErro = 0;
+
+      if (startErro == 0) {
+        startErro = millis();
+      }
+
+      if (millis() - lastBlink &gt; 200) {
+
+        lastBlink = millis();
+
+        st = !st;
+
+        digitalWrite(LED, st);
+
+        if (st) {
+          tone(BUZZER, 2000);
+        }
+
+        else {
+          noTone(BUZZER);
+        }
+      }
+
+      lcd.setCursor(1,0);
+      lcd.print(&quot;Senha Errada &quot;);
+
+      lcd.setCursor(3,1);
+      lcd.print(&quot;Restam:&quot;);
+      lcd.print(MAX_TENT - tentativas);
+      lcd.print(&quot; &quot;);
+
+      if (millis() - startErro &gt; 1000) {
+
+        digitalWrite(LED, LOW);
+        noTone(BUZZER);
+
+        for (int j = 0; j &lt; PASS_LENGTH; j++) {
+          pass[j] = &#x27;\0&#x27;;
+        }
+
+        i = 0;
+
+        startErro = 0;
+
+        enterState(DIGITANDO);
+      }
+
+    } break;
+
+    // ===================== BLOQUEADO =====================
+    case BLOQUEADO: {
+
+      static unsigned long lastBlink = 0;
+      static bool st = false;
+
+      unsigned long tempoPassado = millis() - tempoBloqueio;
+
+      if (tempoPassado &gt;= DURACAO_BLOQUEIO) {
+
+        digitalWrite(LED, LOW);
+        noTone(BUZZER);
+
+        lcd.clear();
+
+        lcd.setCursor(2,0);
+        lcd.print(&quot;Liberado&quot;);
+
+        lcd.setCursor(0,1);
+        lcd.print(&quot;Tente Novamente&quot;);
+
+        tone(BUZZER, 2500);
+        delay(120);
+        noTone(BUZZER);
+
+        delay(1000);
+
+        enterState(FECHADO);
+
+        break;
+      }
+
+      if (millis() - lastBlink &gt; 400) {
+
+        lastBlink = millis();
+
+        st = !st;
+
+        digitalWrite(LED, st);
+
+        if (st) {
+          tone(BUZZER, 1500);
+        }
+
+        else {
+          noTone(BUZZER);
+        }
+      }
+
+      long restante = (DURACAO_BLOQUEIO - tempoPassado) / 1000;
+
+      lcd.setCursor(1,0);
+      lcd.print(&quot;BLOQUEADO   &quot;);
+
+      lcd.setCursor(2,1);
+      lcd.print(restante);
+      lcd.print(&quot; segundos &quot;);
+
+    } break;
+
+    // ===================== ALERTA =====================
+    case ALERTA: {
+
+      static unsigned long lastBlink = 0;
+      static unsigned long lastSiren = 0;
+
+      static bool ledState = false;
+      static bool sirenState = false;
+
+      if (millis() - lastBlink &gt; 120) {
+
+        lastBlink = millis();
+
+        ledState = !ledState;
+
+        digitalWrite(LED, ledState);
+      }
+
+      if (millis() - lastSiren &gt; 180) {
+
+        lastSiren = millis();
+
+        sirenState = !sirenState;
+
+        if (sirenState) {
+          tone(BUZZER, 900);
+        }
+
+        else {
+          tone(BUZZER, 1500);
+        }
+      }
+
+      lcd.setCursor(0,0);
+
+      if (ledState)
+        lcd.print(&quot;!!! ALERTA !!!&quot;);
+      else
+        lcd.print(&quot;&gt;&gt;&gt; ALERTA &lt;&lt;&lt;&quot;);
+
+      lcd.setCursor(1,1);
+      lcd.print(&quot;A=desligar&quot;);
+
+      if (key == &#x27;A&#x27;) {
+
+        digitalWrite(LED, LOW);
+
+        noTone(BUZZER);
+
+        lcd.clear();
+
+        lcd.setCursor(2,0);
+        lcd.print(&quot;Alerta OFF&quot;);
+
+        delay(800);
+
+        enterState(FECHADO);
+      }
+
+    } break;
+  }
+}
+</code></pre>
+      </div>
+    </section>
+    <footer class="codigo-rodape">
+      <a class="botao-voltar-codigo" href="funcionamento.html"><span aria-hidden="true">←</span> Voltar</a>
+    </footer>
+  </main>
+</body>
+</html>

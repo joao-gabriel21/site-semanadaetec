@@ -1,0 +1,1142 @@
+
+/* =========================================
+   CONFIGURAÇÕES GERAIS
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Georgia, "Times New Roman", serif;
+    background: #0b0b07;
+    color: #e7d99c;
+}
+
+
+/* =========================================
+   ESTRUTURA DA PÁGINA
+========================================= */
+
+.pagina {
+    position: relative;
+
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 45px 24px;
+    overflow: hidden;
+}
+
+
+/* =========================================
+   FUNDO MAIA
+========================================= */
+
+.pagina::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    background-image: url("Fundo.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+
+    z-index: 0;
+    pointer-events: none;
+}
+
+
+/* =========================================
+   PLANTA DECORATIVA
+========================================= */
+
+.planta {
+    position: fixed;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: fill;
+
+    z-index: 2;
+
+    pointer-events: none;
+    user-select: none;
+}
+
+
+/* =========================================
+   CONTEÚDO PRINCIPAL
+========================================= */
+
+.conteudo {
+    position: relative;
+    z-index: 5;
+
+    width: 100%;
+    max-width: 1250px;
+
+    margin: auto;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   TÍTULO SUPERIOR
+========================================= */
+
+h1 {
+    font-size: clamp(28px, 4vw, 65px);
+    font-weight: 700;
+
+    letter-spacing: 5px;
+    line-height: 1.2;
+
+    margin-bottom: 22px;
+
+    color: #e7d99c;
+
+    text-shadow:
+        0 3px 12px #000,
+        0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+
+/* =========================================
+   TÍTULO COFRE ARDUINO
+========================================= */
+
+h2 {
+    font-size: clamp(48px, 7vw, 105px);
+    font-weight: 700;
+
+    letter-spacing: 3px;
+    line-height: 1.15;
+
+    margin-bottom: 8px;
+
+    color: #f0df9b;
+
+    text-shadow:
+        0 4px 15px #000,
+        0 0 25px rgba(0, 0, 0, 0.9);
+}
+
+
+/* =========================================
+   TURMA
+========================================= */
+
+h3 {
+    font-size: clamp(25px, 3vw, 42px);
+
+    letter-spacing: 4px;
+
+    margin-bottom: 50px;
+
+    color: #d4c487;
+
+    text-shadow: 0 3px 10px #000;
+}
+
+
+/* =========================================
+   BOTÕES E NAVEGAÇÃO
+========================================= */
+
+.botoes {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.botoes a {
+    display: inline-flex;
+
+    justify-content: center;
+    align-items: center;
+
+    min-width: 200px;
+    max-width: 100%;
+
+    padding: 16px 25px;
+
+    border: 1px solid #bcae70;
+    border-radius: 5px;
+
+    background: rgba(15, 15, 9, 0.88);
+
+    color: #eadb9c;
+
+    text-decoration: none;
+    text-align: center;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+
+    transition:
+        transform 0.3s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease,
+        color 0.3s ease;
+}
+
+.botoes a:hover {
+    transform: translateY(-4px);
+
+    background: rgba(112, 98, 45, 0.95);
+
+    color: #fff;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+.botoes a:focus-visible {
+    outline: 3px solid #f0df9b;
+    outline-offset: 5px;
+}
+
+
+/* =========================================
+   PÁGINAS INTERNAS
+========================================= */
+
+.conteudo-interno {
+    max-width: 1000px;
+
+    padding: 35px;
+
+    border: 1px solid rgba(188, 174, 112, 0.45);
+    border-radius: 8px;
+
+    background: rgba(12, 12, 7, 0.83);
+
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.sobretitulo {
+    margin-bottom: 18px;
+
+    color: #c9b875;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+
+    letter-spacing: 3px;
+    line-height: 1.6;
+}
+
+.conteudo-interno h1 {
+    font-size: clamp(32px, 5vw, 60px);
+
+    letter-spacing: 2px;
+
+    margin-bottom: 30px;
+}
+
+.descricao {
+    max-width: 850px;
+
+    margin: 0 auto 22px;
+
+    color: #eee4bd;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: clamp(16px, 1.5vw, 20px);
+
+    line-height: 1.9;
+}
+
+.conteudo-interno .botoes {
+    margin-top: 35px;
+}
+
+.titulo-secundario {
+    font-size: clamp(35px, 5vw, 60px);
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================================
+   TABLETS E CELULARES
+========================================= */
+
+@media (max-width: 800px) {
+    .pagina {
+        padding: 30px 18px;
+    }
+
+    h1 {
+        letter-spacing: 2px;
+        margin-bottom: 18px;
+    }
+
+    h2 {
+        font-size: clamp(42px, 10vw, 65px);
+        letter-spacing: 1px;
+    }
+
+    h3 {
+        margin-bottom: 35px;
+    }
+
+    .botoes {
+        gap: 12px;
+    }
+
+    .botoes a {
+        min-width: 210px;
+        padding: 14px 20px;
+    }
+
+    .conteudo-interno {
+        padding: 25px 18px;
+    }
+
+    .sobretitulo {
+        letter-spacing: 1.5px;
+    }
+
+    .descricao {
+        line-height: 1.7;
+    }
+}
+
+
+/* =========================================
+   CELULARES ESTREITOS
+========================================= */
+
+@media (max-width: 420px) {
+    .pagina {
+        padding: 24px 14px;
+    }
+
+    .conteudo {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+    h2 {
+        font-size: 40px;
+    }
+
+    h3 {
+        font-size: 25px;
+    }
+
+    .botoes {
+        flex-direction: column;
+    }
+
+    .botoes a {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .conteudo-interno {
+        padding: 22px 15px;
+    }
+}
+
+
+/* =========================================
+   ACESSIBILIDADE
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .botoes a {
+        transition: none;
+    }
+}
+
+
+/* =====================================
+   QUEM SOMOS — ESTILO COMPACTO
+   ===================================== */
+
+.quem-somos-pagina {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 12px 18px;
+    overflow: visible;
+}
+
+.quem-somos-painel {
+    width: 100%;
+    max-width: 1050px;
+    padding: 22px 30px 18px;
+    border: 1px solid rgba(201, 184, 117, 0.55);
+    border-radius: 12px;
+    background: rgba(12, 12, 7, 0.88);
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.45),
+        inset 0 0 25px rgba(188, 174, 112, 0.025);
+    backdrop-filter: blur(3px);
+}
+
+/* Título */
+
+.cabecalho-equipe {
+    text-align: center;
+    margin-bottom: 14px;
+}
+
+.detalhe-titulo {
+    display: block;
+    margin-bottom: 3px;
+    color: #c9b875;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 4px;
+}
+
+.quem-somos-painel h1 {
+    margin: 0 0 8px;
+    color: #f0df9b;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(36px, 4vw, 53px);
+    font-weight: bold;
+    line-height: 1.1;
+    letter-spacing: 1px;
+    text-shadow: 0 3px 12px rgba(0, 0, 0, 0.8);
+}
+
+.linha-dourada {
+    width: 76px;
+    height: 2px;
+    margin: 0 auto;
+    border-radius: 5px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #c9b875,
+        #f0df9b,
+        #c9b875,
+        transparent
+    );
+}
+
+/* Texto de apresentação */
+
+.introducao-equipe {
+    margin: 0 0 15px;
+    color: #e9dfbc;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.introducao-equipe strong {
+    color: #f0df9b;
+    font-weight: bold;
+}
+
+/* Cartões dos integrantes */
+
+.membro {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 49px;
+    height: 100%;
+    padding: 8px 12px;
+    border: 1px solid rgba(188, 174, 112, 0.25);
+    border-radius: 6px;
+    background: rgba(32, 30, 17, 0.72);
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.membro:hover {
+    border-color: rgba(224, 205, 133, 0.8);
+    background: rgba(77, 67, 35, 0.45);
+    transform: translateY(-1px);
+}
+
+.nome-aluno {
+    min-width: 0;
+    color: #eee4bd;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.numero-aluno {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    min-width: 43px;
+    height: 29px;
+    padding: 0 7px;
+    border: 1px solid #a99754;
+    border-radius: 5px;
+    background: rgba(188, 174, 112, 0.12);
+    color: #f0df9b;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Botão de retorno */
+
+.rodape-equipe {
+    display: flex;
+    justify-content: center;
+    margin-top: 17px;
+}
+
+.botao-voltar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 42px;
+    padding: 10px 23px;
+    border: 1px solid #bcae70;
+    border-radius: 5px;
+    background: rgba(15, 15, 9, 0.9);
+    color: #eadb9c;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.botao-voltar:hover {
+    transform: translateY(-2px);
+    background: #70622d;
+    color: #fff;
+}
+
+.botao-voltar:focus-visible {
+    outline: 3px solid #f0df9b;
+    outline-offset: 4px;
+}
+
+/* Telas menores */
+
+@media (max-width: 767px) {
+    .quem-somos-pagina {
+        padding: 16px 12px;
+    }
+
+    .quem-somos-painel {
+        padding: 22px 16px 18px;
+    }
+
+    .quem-somos-painel h1 {
+        font-size: clamp(34px, 8vw, 44px);
+    }
+
+    .introducao-equipe {
+        font-size: 14px;
+        margin-bottom: 13px;
+    }
+
+    .membro {
+        min-height: 44px;
+        padding: 7px 10px;
+    }
+
+    .nome-aluno {
+        font-size: 14px;
+    }
+
+    .rodape-equipe {
+        margin-top: 15px;
+    }
+}
+
+/* Celulares estreitos */
+
+@media (max-width: 380px) {
+    .quem-somos-painel {
+        padding: 20px 11px 15px;
+    }
+
+    .nome-aluno {
+        font-size: 12px;
+    }
+
+    .numero-aluno {
+        min-width: 38px;
+        padding: 0 5px;
+        font-size: 11px;
+    }
+
+    .detalhe-titulo {
+        letter-spacing: 2px;
+    }
+}
+
+/* Respeita quem prefere menos animações */
+
+@media (prefers-reduced-motion: reduce) {
+    .membro,
+    .botao-voltar {
+        transition: none;
+    }
+}
+
+
+/* =========================================
+   FUNCIONAMENTO DO COFRE
+========================================= */
+
+/* Estrutura geral: preserva o fundo maia existente */
+
+.pagina-funcionamento {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 16px 28px 22px;
+    background: transparent;
+}
+
+.funcionamento-conteudo {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    padding: 0;
+}
+
+.layout-funcionamento {
+    position: relative;
+    width: 100%;
+    max-width: 1220px;
+    margin: 0 auto;
+}
+
+/* Título principal */
+
+.cabecalho-funcionamento {
+    margin-bottom: 23px;
+    text-align: center;
+}
+
+.identificacao-projeto {
+    margin-bottom: 6px;
+    color: #d4c487;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.cabecalho-funcionamento h1 {
+    margin: 0 0 11px;
+    color: #f0df9b;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(37px, 4vw, 53px);
+    font-weight: bold;
+    letter-spacing: 1px;
+    line-height: 1.12;
+    text-shadow: 0 3px 15px #000;
+}
+
+.linha-dourada {
+    width: 100px;
+    height: 2px;
+    margin: 0 auto;
+    border-radius: 5px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #bcae70,
+        #f0df9b,
+        #bcae70,
+        transparent
+    );
+}
+
+/* Títulos das colunas */
+
+.conteudo-principal {
+    align-items: stretch;
+}
+
+.coluna-conteudo {
+    display: flex;
+    flex-direction: column;
+}
+
+.titulo-secao {
+    margin: 0 0 12px;
+    color: #f0df9b;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(25px, 2.4vw, 32px);
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 3px 10px #000;
+}
+
+/* Tabela de componentes */
+
+.painel-tabela {
+    flex: 1;
+    overflow: hidden;
+    border: 1px solid rgba(188, 174, 112, 0.72);
+    border-radius: 8px;
+    background: rgba(13, 13, 8, 0.95);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.tabela-componentes {
+    width: 100%;
+    margin: 0;
+    color: #eee4bd;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    vertical-align: middle;
+
+    --bs-table-bg: transparent;
+    --bs-table-color: #eee4bd;
+    --bs-table-border-color: rgba(188, 174, 112, 0.22);
+    --bs-table-hover-bg: transparent;
+    --bs-table-hover-color: #fff4c8;
+}
+
+.tabela-componentes thead th {
+    padding: 12px 15px;
+    border-bottom: 1px solid #a99754;
+    background: rgba(112, 98, 45, 0.30);
+    color: #f0df9b;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+}
+
+.tabela-componentes tbody td {
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(188, 174, 112, 0.19);
+    background: transparent;
+    color: #eee4bd;
+    line-height: 1.3;
+    transition:
+        background-color 0.22s ease,
+        color 0.22s ease,
+        padding-left 0.22s ease;
+}
+
+/* Efeito ao passar o mouse por cada linha */
+
+.tabela-componentes tbody tr {
+    cursor: default;
+}
+
+.tabela-componentes tbody tr:hover td {
+    background-color: rgba(153, 132, 63, 0.25);
+    color: #fff4c8;
+}
+
+.tabela-componentes tbody tr:hover td:first-child {
+    padding-left: 21px;
+}
+
+.tabela-componentes tbody tr:hover .quantidade {
+    color: #fff0a7;
+}
+
+.tabela-componentes tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Coluna da quantidade */
+
+.col-quantidade {
+    width: 130px;
+    text-align: center;
+}
+
+.tabela-componentes .quantidade {
+    color: #f0df9b;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+/* Imagem e painel do circuito */
+
+.painel-circuito {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    margin: 0;
+    padding: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(188, 174, 112, 0.72);
+    border-radius: 8px;
+    background: radial-gradient(
+        circle at center,
+        rgba(112, 98, 45, 0.24),
+        rgba(13, 13, 8, 0.96)
+    );
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+/* Mantém a imagem quadrada sem deformá-la */
+
+.imagem-circuito {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    object-fit: contain;
+    object-position: center;
+}
+
+/* Rodapé e links complementares */
+
+.rodape-funcionamento {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.rodape-funcionamento h2 {
+    margin-bottom: 12px;
+    color: #f0df9b;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.atalhos-funcionamento {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.botao-atalho {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    min-width: 195px;
+    min-height: 46px;
+    padding: 10px 18px;
+    border: 1px solid #bcae70;
+    border-radius: 6px;
+    background: rgba(15, 15, 9, 0.94);
+    color: #f0df9b;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.botao-atalho:hover {
+    transform: translateY(-3px);
+    border-color: #f0df9b;
+    background: rgba(112, 98, 45, 0.88);
+    color: #fff;
+    box-shadow: 0 7px 18px rgba(0, 0, 0, 0.35);
+}
+
+.simbolo-atalho {
+    color: #f0df9b;
+    font-family: monospace;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+/* Botão Voltar ao início */
+
+.botao-inicio {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    min-width: 210px;
+    min-height: 45px;
+    margin-top: 18px;
+    padding: 11px 22px;
+    border: 1px solid #bcae70;
+    border-radius: 6px;
+    background: rgba(9, 9, 5, 0.96);
+    color: #f0df9b;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.botao-inicio:hover {
+    transform: translateY(-3px);
+    background: rgba(112, 98, 45, 0.95);
+    color: #fff;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+}
+
+/* Foco visível para navegação por teclado */
+
+.pagina-funcionamento .botao-atalho:focus-visible,
+.pagina-funcionamento .botao-inicio:focus-visible {
+    outline: 3px solid #f0df9b;
+    outline-offset: 4px;
+}
+
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
+
+@media (min-width: 992px) {
+    .pagina-funcionamento {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .conteudo-principal {
+        --bs-gutter-x: 1.8rem;
+    }
+}
+
+/* Tablets e celulares */
+
+@media (max-width: 991px) {
+    .pagina-funcionamento {
+        padding: 24px 18px;
+    }
+
+    .cabecalho-funcionamento {
+        margin-bottom: 24px;
+    }
+
+    .conteudo-principal {
+        --bs-gutter-y: 1.8rem;
+    }
+
+    .painel-circuito {
+        flex: none;
+        width: 100%;
+        max-width: 390px;
+        aspect-ratio: 1 / 1;
+        margin: 0 auto;
+    }
+
+    .imagem-circuito {
+        width: 100%;
+        height: 100%;
+    }
+
+    .rodape-funcionamento {
+        margin-top: 25px;
+    }
+}
+
+/* Celulares */
+
+@media (max-width: 575px) {
+    .pagina-funcionamento {
+        padding: 18px 12px 25px;
+    }
+
+    .cabecalho-funcionamento h1 {
+        font-size: clamp(30px, 8vw, 40px);
+    }
+
+    .identificacao-projeto {
+        font-size: 9px;
+        letter-spacing: 1.8px;
+    }
+
+    .titulo-secao {
+        font-size: 25px;
+    }
+
+    .tabela-componentes {
+        font-size: 12px;
+    }
+
+    .tabela-componentes thead th {
+        padding: 10px 8px;
+        font-size: 10px;
+        letter-spacing: 0.5px;
+    }
+
+    .tabela-componentes tbody td {
+        padding: 9px 8px;
+    }
+
+    .tabela-componentes tbody tr:hover td:first-child {
+        padding-left: 12px;
+    }
+
+    .col-quantidade {
+        width: 92px;
+    }
+
+    .atalhos-funcionamento {
+        gap: 10px;
+    }
+
+    .botao-atalho {
+        width: 100%;
+        min-width: 0;
+        padding: 10px 9px;
+        font-size: 12px;
+    }
+
+    .botao-inicio {
+        width: 100%;
+        max-width: 280px;
+    }
+}
+
+/* Notebooks com pouca altura */
+
+@media (min-width: 992px) and (max-height: 800px) {
+    .pagina-funcionamento {
+        padding-top: 8px;
+        padding-bottom: 12px;
+    }
+
+    .cabecalho-funcionamento {
+        margin-bottom: 15px;
+    }
+
+    .identificacao-projeto {
+        margin-bottom: 3px;
+        font-size: 9px;
+    }
+
+    .cabecalho-funcionamento h1 {
+        margin-bottom: 7px;
+        font-size: 41px;
+    }
+
+    .titulo-secao {
+        margin-bottom: 8px;
+        font-size: 26px;
+    }
+
+    .tabela-componentes thead th {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .tabela-componentes tbody td {
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+
+    .rodape-funcionamento {
+        margin-top: 15px;
+    }
+
+    .rodape-funcionamento h2 {
+        margin-bottom: 7px;
+        font-size: 19px;
+    }
+
+    .botao-atalho {
+        min-height: 39px;
+        padding: 7px 14px;
+    }
+
+    .botao-inicio {
+        min-height: 39px;
+        margin-top: 10px;
+        padding: 8px 18px;
+    }
+}
+
+/* Acessibilidade: reduzir animações */
+
+@media (prefers-reduced-motion: reduce) {
+    .pagina-funcionamento .tabela-componentes tbody td,
+    .pagina-funcionamento .botao-atalho,
+    .pagina-funcionamento .botao-inicio {
+        transition: none;
+    }
+}
+
+
+/* =========================================
+   CORREÇÃO DO FUNDO MAIA — FUNCIONAMENTO
+========================================= */
+
+body.pagina-funcionamento::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+
+    background-image: url("Fundo.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+
+    pointer-events: none;
+}
+
+/* Garante que a página não esconda o fundo */
+body.pagina-funcionamento {
+    position: relative;
+    isolation: isolate;
+    background: transparent;
+}
